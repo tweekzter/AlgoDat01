@@ -2,11 +2,15 @@ package ab1;
 
 import ab1.impl.SimonSoellnbauer.Ab1Impl;
 import ab1.Ab1.ListNode;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import java.util.Arrays;
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -202,18 +206,6 @@ public class Ab1Test {
 	}
 
 	@Test
-	public void testListSearchInd() {
-		ListNode head = new ListNode(2);
-		ListNode n2 = new ListNode(3);
-		ListNode n3 = new ListNode(4);
-		head.next = n2;
-		n2.next = n3;
-
-		ListNode found = ab1Impl.search(head, 2);
-		assertEquals(head, found);
-	}
-
-	@Test
 	public void testListMinimum()
 	{
 		for(int i = 0; i < NUM_TESTS; ++i)
@@ -221,7 +213,7 @@ public class Ab1Test {
 			int[] test = getRandomArray(ARRAY_SIZE_SMALL);
 			int min = Integer.MAX_VALUE;
 			ListNode head = null;
-			for(int j = 1; j < test.length; ++j)
+			for(int j = 0; j < test.length; ++j)
 			{
 				head = ab1Impl.insert(head, test[j]);
 				assertNotNull(head);

@@ -16,6 +16,7 @@ public interface Ab1 {
 		public ListNode next; /** Pointer to next element */
 		public int value; /** The value of the current element */
 
+		public ListNode() {}
 		public ListNode(int value) {
 			this.value = value;
 		}
