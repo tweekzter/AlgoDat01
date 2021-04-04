@@ -250,6 +250,33 @@ public class Ab1Test {
 		}
 	}
 
+	/**
+	 * added by SimSöl
+	 */
+	@Test
+	public void testMergeSortNull() {
+		assertDoesNotThrow(() -> ab1Impl.mergesort(null));
+	}
+
+	/**
+	 * added by SimSöl
+	 */
+	@Test
+	public void testMergeSortEmpty() {
+		int[] ar = {};
+		assertDoesNotThrow(() -> ab1Impl.mergesort(ar));
+	}
+
+	/**
+	 * added by SimSöl
+	 */
+	@Test
+	public void testMergeSortOneElement() {
+		int[] ar = {4};
+		ab1Impl.mergesort(ar);
+		assertEquals(4, ar[0]);
+	}
+
 	private int[] getRandomArray(int size) {
 		int[] arr = new int[size];
 		for (int i = 0; i < size; ++i)

@@ -37,10 +37,11 @@ public class Ab1Impl implements Ab1 {
 		ListNode actual = head;
 		ListNode prev = null;
 
+		// empty list
 		if(head == null)
 			return newNode;
 
-		// find correct spot in sorted list for new element
+		// find correct spot in sorted list
 		while(actual != null && actual.value < newNode.value) {
 			prev = actual;
 			actual = actual.next;
@@ -52,8 +53,8 @@ public class Ab1Impl implements Ab1 {
 			return newNode;
 		}
 
-		// otherwise insert new element between preceding smaller element
-		// and subsequent equal or greater element (or null)
+		// otherwise insert new element between preceding
+		// and subsequent element (or null)
 		prev.next = newNode;
 		newNode.next = actual;
 
@@ -80,6 +81,100 @@ public class Ab1Impl implements Ab1 {
 	@Override
 	public void mergesort(int[] data)
 	{
-		// YOUR CODE HERE
+		if(data == null)
+			return;
+
+		int[] result = mSort(data);
+		for(int i=0; i < result.length; i++) {
+			data[i] = result[i];
+			System.out.print(result[i]);
+		}
+	}
+
+	/**
+	 * Actual MergeSort algorithm.
+	 *
+	 * The basic idea is to divide an array into trivial parts of size 1 and therefore sorted subarrays.
+	 * Then the recursion stops and the subarrays are sorted by merging all pairs of neighbouring subarrays.
+	 *
+	 * @param data Array to sort
+	 * @return sorted array or respective subarray
+	 */
+	private int[] mSort(int[] data) {
+		// subarrays at size 1 -> subarrays are definitely sorted - end recursion
+		if(data.length <= 1)
+			return data;
+
+		// divide arrays
+		int loLength = data.length / 2;
+		int hiLength = data.length - loLength;
+
+		int[] lo = new int[loLength]; // lower subarray
+		int[] hi = new int[hiLength]; // upper subarray
+
+		// populate subarrays
+		for(int i=0; i < loLength; i++) {
+			lo[i] = data[i];
+		}
+		for(int i=0; i < hiLength; i++) {
+			hi[i] = data[loLength + i];
+		}
+
+		// start recursive division of arrays
+		lo = mSort(lo);
+		hi = mSort(hi);
+		int[] result = merge(lo, hi);
+
+		return result;
+	}
+
+	/**
+	 * helper method to merge (sort) two subarrays
+	 *
+	 * @param lo lower subarray
+	 * @param hi upper subarray
+	 * @return merged sorted array
+	 */
+	private int[] merge(int[] lo, int[] hi) {
+		int[] result = new int[lo.length + hi.length];
+
+		// i ... lower subarray index
+		// j ... upper subarray index
+		// k ... result array index
+		int i=0, j=0, k=0;
+		while(k < result.length) {
+			// if one of the subarrays is done - add the rest of the other array
+			if(i >= lo.length) {
+				while(j < hi.length) {
+					result[k] = hi[j];
+					j++;
+					k++;
+				}
+				break;
+			}
+			else if(j >= hi.length) {
+				while(i < lo.length) {
+					result[k] = lo[i];
+					i++;
+					k++;
+				}
+				break;
+			}
+
+			// if there are still elements in both subarrays
+			// compare elements step by step and always add the lower one to the result
+			if(lo[i] <= hi[j]) {
+				result[k] = lo[i];
+				i++;
+				k++;
+			}
+			else {
+				result[k] = hi[j];
+				j++;
+				k++;
+			}
+		}
+
+		return result;
 	}
 }
