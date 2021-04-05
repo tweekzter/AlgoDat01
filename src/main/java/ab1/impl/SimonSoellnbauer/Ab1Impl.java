@@ -11,95 +11,23 @@ import ab1.Ab1;
  */
 public class Ab1Impl implements Ab1 {
 
-	/*
-    Basic idea of heapsort-algorithm:
-    Arrange elements in binary tree structure.
-    Every node has to fulfill the heap-requirements (Max-heap: Every parent node has to be larger than the child-nodes).
-    Now check heap condition for every node an swap nodes if it's neccessary.
-    This has to be done recursively until the largest element is at the top of the tree.
-    */
-
 	@Override
-	public boolean isHeap(int i, int j, int[] data) {
-
-		//check heap conditions i <= k <= j
-		for (i = 0; i < (j - 2) / 2; i++) {
-
-			//a[k] >= a[2k], in case of 2k <= j --> false
-			if (data[2 * i + 1] > data[i]) {
-				return false;
-			}
-
-			//a[k] >= a[2k + 1], in case of 2k + 1 <= j --> false
-			if (2 * i + 2 < j && data[2 * i + 2] > data[i]) {
-				return false;
-			}
-		}
-		//both heap-conditions true
-		return true;
+	public boolean isHeap(int i, int j, int[] data)
+	{
+		// YOUR CODE HERE
+		return false;
 	}
 
 	@Override
-	public void toHeap(int[] data) {
-
-		int length = data.length;
-		int index = (length / 2) - 1;
-
-		for (int i = index; i >= 0; i--) {
-			//call helper-method to build max-heap
-			heapify(data, length, i);
-		}
-	}
-
-	//helper-method to build max-heap
-	static void heapify(int[] data, int length, int i) {
-
-		int root = i; //largest element (parent node)
-		int left = 2 * i + 1;
-		int right = 2 * i + 2;
-
-		//left child node is lager than parent node
-		if (left < length && data[left] > data[root]) {
-			root = left;
-		}
-
-		//right child node is current largest element
-		if (right < length && data[right] > data[root]) {
-			root = right;
-		}
-
-		//largest element is not root element
-		if (root != i) {
-			int temp = data[i];
-			data[i] = data[root];
-			data[root] = temp;
-
-			//therefore, recursively start the changing procedure again
-			heapify(data, length, root);
-		}
+	public void toHeap(int[] data)
+	{
+		// YOUR CODE HERE
 	}
 
 	@Override
-	public void heapsort(int[] data) {
-
-		int length = data.length;
-
-		//build heap with previous heapify method
-		for (int i = length / 2 - 1; i >= 0; i--) {
-			heapify(data, length, i);
-		}
-
-		//extract heap elements (from tree structure, e.g. VO-Folien)
-		for (int i = length - 1; i >= 0; i--) {
-
-			//swap elements (current root to the end)
-			int temp = data[0];
-			data[0] = data[i];
-			data[i] = temp;
-
-			//call heapify on the rearranged array
-			heapify(data, i, 0);
-		}
+	public void heapsort(int[] data)
+	{
+		// YOUR CODE HERE
 	}
 
 	@Override
