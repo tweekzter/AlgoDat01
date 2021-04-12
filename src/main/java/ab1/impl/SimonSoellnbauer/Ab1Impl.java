@@ -5,7 +5,7 @@ import ab1.Ab1;
 /**
  * Algorithmen & Datenstrukturen
  * ABGABE 1
- *
+ * <p>
  * Peter Söllnbauer - #11904589
  * Manuel Simon - #00326348
  */
@@ -17,236 +17,238 @@ public class Ab1Impl implements Ab1 {
     Every node has to fulfill the heap-requirements (Max-heap: Every parent node has to be larger than the child-nodes).
     Now check heap condition for every node an swap nodes if it's neccessary.
     This has to be done recursively until the largest element is at the top of the tree.
+
+    In this case: Recursive implementation
     */
 
-	@Override
-	public boolean isHeap(int i, int j, int[] data) {
+    // Variables: data[]: random array, int j: lenght of array, i: counter variable for pointer
 
-		//check heap conditions i <= k <= j
-		for (i = 0; i < (j - 2) / 2; i++) {
 
-			//a[k] >= a[2k], in case of 2k <= j --> false
-			if (data[2 * i + 1] > data[i]) {
-				return false;
-			}
+    @Override
+    public boolean isHeap(int i, int j, int[] data) {
 
-			//a[k] >= a[2k + 1], in case of 2k + 1 <= j --> false
-			if (2 * i + 2 < j && data[2 * i + 2] > data[i]) {
-				return false;
-			}
-		}
-		//both heap-conditions true
-		return true;
-	}
+        //check heap conditions i <= k <= j
+        for (i = 0; i < (j - 2) / 2; i++) {
 
-	@Override
-	public void toHeap(int[] data) {
+            //a[k] >= a[2k], in case of 2k <= j --> false
+            if (data[2 * i + 1] > data[i]) {
+                return false;
+            }
 
-		int length = data.length;
-		int index = (length / 2) - 1;
+            //a[k] >= a[2k + 1], in case of 2k + 1 <= j --> false
+            if (2 * i + 2 < j && data[2 * i + 2] > data[i]) {
+                return false;
+            }
+        }
+        //both heap-conditions true
+        return true;
+    }
 
-		for (int i = index; i >= 0; i--) {
-			//call helper-method to build max-heap
-			heapify(data, length, i);
-		}
-	}
+    @Override
+    public void toHeap(int[] data) {
 
-	//helper-method to build max-heap
-	static void heapify(int[] data, int length, int i) {
+        int length = data.length;
+        int index = (length / 2) - 1;
 
-		int root = i; //largest element (parent node)
-		int left = 2 * i + 1;
-		int right = 2 * i + 2;
+        for (int i = index; i >= 0; i--) {
+            //call helper-method to build max-heap
+            heapify(data, length, i);
+        }
+    }
 
-		//left child node is lager than parent node
-		if (left < length && data[left] > data[root]) {
-			root = left;
-		}
+    // helper-method to build max-heap
+    static void heapify(int[] data, int length, int i) {
 
-		//right child node is current largest element
-		if (right < length && data[right] > data[root]) {
-			root = right;
-		}
+        int root = i; //largest element (parent node)
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
 
-		//largest element is not root element
-		if (root != i) {
-			int temp = data[i];
-			data[i] = data[root];
-			data[root] = temp;
+        //left child node is lager than parent node
+        if (left < length && data[left] > data[root]) {
+            root = left;
+        }
 
-			//therefore, recursively start the changing procedure again
-			heapify(data, length, root);
-		}
-	}
+        // right child node is current largest element
+        if (right < length && data[right] > data[root]) {
+            root = right;
+        }
 
-	@Override
-	public void heapsort(int[] data) {
+        // largest element is not root element
+        if (root != i) {
 
-		int length = data.length;
+            // so called "Dreieckstausch"
+            int temp = data[i];
+            data[i] = data[root];
+            data[root] = temp;
 
-		//build heap with previous heapify method
-		for (int i = length / 2 - 1; i >= 0; i--) {
-			heapify(data, length, i);
-		}
+            // therefore, recursively start the changing procedure again
+            heapify(data, length, root);
+        }
+    }
 
-		//extract heap elements (from tree structure, e.g. VO-Folien)
-		for (int i = length - 1; i >= 0; i--) {
+    @Override
+    public void heapsort(int[] data) {
 
-			//swap elements (current root to the end)
-			int temp = data[0];
-			data[0] = data[i];
-			data[i] = temp;
+        int length = data.length;
 
-			//call heapify on the rearranged array
-			heapify(data, i, 0);
-		}
-	}
+        // build heap with previous heapify method
+        for (int i = length / 2 - 1; i >= 0; i--) {
+            heapify(data, length, i);
+        }
 
-	@Override
-	public ListNode insert(ListNode head, int value)
-	{
-		ListNode newNode = new ListNode(value);
-		ListNode actual = head;
-		ListNode prev = null;
+        // extract heap elements (from tree structure, e.g. VO-Folien)
+        for (int i = length - 1; i >= 0; i--) {
 
-		// empty list
-		if(head == null)
-			return newNode;
+            //swap elements (current root to the end)
+            // so called "Dreieckstausch"
+            int temp = data[0];
+            data[0] = data[i];
+            data[i] = temp;
 
-		// find correct spot in sorted list
-		while(actual != null && actual.value < newNode.value) {
-			prev = actual;
-			actual = actual.next;
-		}
+            // call heapify method on the rearranged array
+            heapify(data, i, 0);
+        }
+    }
 
-		// if new element is at the beginning of list
-		if(prev == null) {
-			newNode.next = head;
-			return newNode;
-		}
+    @Override
+    public ListNode insert(ListNode head, int value) {
+        ListNode newNode = new ListNode(value);
+        ListNode actual = head;
+        ListNode prev = null;
 
-		// otherwise insert new element between preceding
-		// and subsequent element (or null)
-		prev.next = newNode;
-		newNode.next = actual;
+        // empty list
+        if (head == null)
+            return newNode;
 
-		return head;
-	}
+        // find correct spot in sorted list
+        while (actual != null && actual.value < newNode.value) {
+            prev = actual;
+            actual = actual.next;
+        }
 
-	@Override
-	public ListNode search(ListNode head, int value)
-	{
-		while(head != null && head.value != value) {
-			head = head.next;
-		}
+        // if new element is at the beginning of list
+        if (prev == null) {
+            newNode.next = head;
+            return newNode;
+        }
 
-		return head;
-	}
+        // otherwise insert new element between preceding
+        // and subsequent element (or null)
+        prev.next = newNode;
+        newNode.next = actual;
 
-	@Override
-	public ListNode minimum(ListNode head)
-	{
-		// as the pre condition is a sorted ascending list, the first element is also the smallest
-		return head;
-	}
+        return head;
+    }
 
-	@Override
-	public void mergesort(int[] data)
-	{
-		if(data == null)
-			return;
+    @Override
+    public ListNode search(ListNode head, int value) {
+        while (head != null && head.value != value) {
+            head = head.next;
+        }
 
-		int[] result = mSort(data);
-		for(int i=0; i < result.length; i++) {
-			data[i] = result[i];
-			System.out.print(result[i]);
-		}
-	}
+        return head;
+    }
 
-	/**
-	 * Actual MergeSort algorithm.
-	 *
-	 * The basic idea is to divide an array into trivial parts of size 1 and therefore sorted subarrays.
-	 * Then the recursion stops and the subarrays are sorted by merging all pairs of neighbouring subarrays.
-	 *
-	 * @param data Array to sort
-	 * @return sorted array or respective subarray
-	 */
-	private int[] mSort(int[] data) {
-		// subarrays at size 1 -> subarrays are definitely sorted - end recursion
-		if(data.length <= 1)
-			return data;
+    @Override
+    public ListNode minimum(ListNode head) {
+        // as the pre condition is a sorted ascending list, the first element is also the smallest
+        return head;
+    }
 
-		// divide arrays
-		int loLength = data.length / 2;
-		int hiLength = data.length - loLength;
+    @Override
+    public void mergesort(int[] data) {
+        if (data == null)
+            return;
 
-		int[] lo = new int[loLength]; // lower subarray
-		int[] hi = new int[hiLength]; // upper subarray
+        int[] result = mSort(data);
+        for (int i = 0; i < result.length; i++) {
+            data[i] = result[i];
+            System.out.print(result[i]);
+        }
+    }
 
-		// populate subarrays
-		for(int i=0; i < loLength; i++) {
-			lo[i] = data[i];
-		}
-		for(int i=0; i < hiLength; i++) {
-			hi[i] = data[loLength + i];
-		}
+    /**
+     * Actual MergeSort algorithm.
+     * <p>
+     * The basic idea is to divide an array into trivial parts of size 1 and therefore sorted subarrays.
+     * Then the recursion stops and the subarrays are sorted by merging all pairs of neighbouring subarrays.
+     *
+     * @param data Array to sort
+     * @return sorted array or respective subarray
+     */
+    private int[] mSort(int[] data) {
+        // subarrays at size 1 -> subarrays are definitely sorted - end recursion
+        if (data.length <= 1)
+            return data;
 
-		// start recursive division of arrays
-		lo = mSort(lo);
-		hi = mSort(hi);
-		int[] result = merge(lo, hi);
+        // divide arrays
+        int loLength = data.length / 2;
+        int hiLength = data.length - loLength;
 
-		return result;
-	}
+        int[] lo = new int[loLength]; // lower subarray
+        int[] hi = new int[hiLength]; // upper subarray
 
-	/**
-	 * helper method to merge (sort) two subarrays
-	 *
-	 * @param lo lower subarray
-	 * @param hi upper subarray
-	 * @return merged sorted array
-	 */
-	private int[] merge(int[] lo, int[] hi) {
-		int[] result = new int[lo.length + hi.length];
+        // populate subarrays
+        for (int i = 0; i < loLength; i++) {
+            lo[i] = data[i];
+        }
+        for (int i = 0; i < hiLength; i++) {
+            hi[i] = data[loLength + i];
+        }
 
-		// i ... lower subarray index
-		// j ... upper subarray index
-		// k ... result array index
-		int i=0, j=0, k=0;
-		while(k < result.length) {
-			// if one of the subarrays is done - add the rest of the other array
-			if(i >= lo.length) {
-				while(j < hi.length) {
-					result[k] = hi[j];
-					j++;
-					k++;
-				}
-				break;
-			}
-			else if(j >= hi.length) {
-				while(i < lo.length) {
-					result[k] = lo[i];
-					i++;
-					k++;
-				}
-				break;
-			}
+        // start recursive division of arrays
+        lo = mSort(lo);
+        hi = mSort(hi);
+        int[] result = merge(lo, hi);
 
-			// if there are still elements in both subarrays
-			// compare elements step by step and always add the lower one to the result
-			if(lo[i] <= hi[j]) {
-				result[k] = lo[i];
-				i++;
-				k++;
-			}
-			else {
-				result[k] = hi[j];
-				j++;
-				k++;
-			}
-		}
+        return result;
+    }
 
-		return result;
-	}
+    /**
+     * helper method to merge (sort) two subarrays
+     *
+     * @param lo lower subarray
+     * @param hi upper subarray
+     * @return merged sorted array
+     */
+    private int[] merge(int[] lo, int[] hi) {
+        int[] result = new int[lo.length + hi.length];
+
+        // i ... lower subarray index
+        // j ... upper subarray index
+        // k ... result array index
+        int i = 0, j = 0, k = 0;
+        while (k < result.length) {
+            // if one of the subarrays is done - add the rest of the other array
+            if (i >= lo.length) {
+                while (j < hi.length) {
+                    result[k] = hi[j];
+                    j++;
+                    k++;
+                }
+                break;
+            } else if (j >= hi.length) {
+                while (i < lo.length) {
+                    result[k] = lo[i];
+                    i++;
+                    k++;
+                }
+                break;
+            }
+
+            // if there are still elements in both subarrays
+            // compare elements step by step and always add the lower one to the result
+            if (lo[i] <= hi[j]) {
+                result[k] = lo[i];
+                i++;
+                k++;
+            } else {
+                result[k] = hi[j];
+                j++;
+                k++;
+            }
+        }
+
+        return result;
+    }
 }
