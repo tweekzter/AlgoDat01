@@ -5,7 +5,7 @@ import ab1.Ab1;
 /**
  * Algorithmen & Datenstrukturen
  * ABGABE 1
- * <p>
+ *
  * Peter Söllnbauer - #11904589
  * Manuel Simon - #00326348
  */
@@ -15,7 +15,7 @@ public class Ab1Impl implements Ab1 {
     Basic idea of heapsort-algorithm:
     Arrange elements in binary tree structure.
     Every node has to fulfill the heap-requirements (Max-heap: Every parent node has to be larger than the child-nodes).
-    Now check heap condition for every node an swap nodes if it's neccessary.
+    Now check heap condition for every node an swap nodes if it's necessary.
     This has to be done recursively until the largest element is at the top of the tree.
 
     In this case: Recursive implementation
@@ -110,6 +110,7 @@ public class Ab1Impl implements Ab1 {
         }
     }
 
+
     @Override
     public ListNode insert(ListNode head, int value) {
         ListNode newNode = new ListNode(value);
@@ -155,100 +156,115 @@ public class Ab1Impl implements Ab1 {
         return head;
     }
 
+    /**
+     * MergeSort is a divide & conquer algorithm. It splits an array into halves recursively until the trivial
+     * size of 1 is reached. Then the results get merged by sorting the subarrays step by step until the entire
+     * array is sorted.
+     *
+     * In this implementation we split arrays by indices. This allows us to directly sort in the given array.
+     * Separate arrays (out of place) are only used during the merging process.
+     *
+     * @param data array to be sorted
+     */
     @Override
     public void mergesort(int[] data) {
-        if (data == null)
+        if(data == null)
+            return;
+        mSort(data, 0, data.length-1);
+    }
+
+    /**
+     * Actual sorting method.
+     *
+     * @param data array to be sorted
+     * @param start start index of subarray
+     * @param end end index of subarray
+     */
+    private void mSort(int[] data, int start, int end) {
+        // only one element left - definitely sorted - recursion stops
+        if(start >= end)
             return;
 
-        int[] result = mSort(data);
-        for (int i = 0; i < result.length; i++) {
-            data[i] = result[i];
-            System.out.print(result[i]);
-        }
+        // split into lower and upper subarrays
+        int length = (end - start) + 1;
+        int hiStart = start + length / 2;
+        int loEnd = hiStart - 1;
+
+        // recursive calls to split array and subsequently merge the results
+        mSort(data, start, loEnd);
+        mSort(data, hiStart, end);
+        merge(data, start, loEnd, hiStart, end);
     }
 
     /**
-     * Actual MergeSort algorithm.
-     * <p>
-     * The basic idea is to divide an array into trivial parts of size 1 and therefore sorted subarrays.
-     * Then the recursion stops and the subarrays are sorted by merging all pairs of neighbouring subarrays.
+     * The merging process.
      *
-     * @param data Array to sort
-     * @return sorted array or respective subarray
+     * @param data array to be sorted
+     * @param start start index of lower subarray
+     * @param loEnd end index of lower subarray
+     * @param hiStart start index of upper subarray
+     * @param end end index of upper subarray
      */
-    private int[] mSort(int[] data) {
-        // subarrays at size 1 -> subarrays are definitely sorted - end recursion
-        if (data.length <= 1)
-            return data;
+    private void merge(int[] data, int start, int loEnd, int hiStart, int end) {
+        int loLength = (loEnd - start) + 1;
+        int hiLength = (end - hiStart) + 1;
 
-        // divide arrays
-        int loLength = data.length / 2;
-        int hiLength = data.length - loLength;
+        // the two subarrays to be sorted
+        int[] lo = extractArray(data, start, loEnd);
+        int[] hi = extractArray(data, hiStart, end);
 
-        int[] lo = new int[loLength]; // lower subarray
-        int[] hi = new int[hiLength]; // upper subarray
-
-        // populate subarrays
-        for (int i = 0; i < loLength; i++) {
-            lo[i] = data[i];
-        }
-        for (int i = 0; i < hiLength; i++) {
-            hi[i] = data[loLength + i];
-        }
-
-        // start recursive division of arrays
-        lo = mSort(lo);
-        hi = mSort(hi);
-        int[] result = merge(lo, hi);
-
-        return result;
-    }
-
-    /**
-     * helper method to merge (sort) two subarrays
-     *
-     * @param lo lower subarray
-     * @param hi upper subarray
-     * @return merged sorted array
-     */
-    private int[] merge(int[] lo, int[] hi) {
-        int[] result = new int[lo.length + hi.length];
-
-        // i ... lower subarray index
-        // j ... upper subarray index
-        // k ... result array index
-        int i = 0, j = 0, k = 0;
-        while (k < result.length) {
-            // if one of the subarrays is done - add the rest of the other array
-            if (i >= lo.length) {
-                while (j < hi.length) {
-                    result[k] = hi[j];
-                    j++;
-                    k++;
-                }
-                break;
-            } else if (j >= hi.length) {
-                while (i < lo.length) {
-                    result[k] = lo[i];
+        int i = start;
+        int loIndex = 0;
+        int hiIndex = 0;
+        while(i <= end) {
+            // if lower subarray is done, fill result with upper subarray
+            if(loIndex >= loLength) {
+                while(hiIndex < hiLength) {
+                    data[i] = hi[hiIndex];
+                    hiIndex++;
                     i++;
-                    k++;
                 }
-                break;
             }
-
-            // if there are still elements in both subarrays
-            // compare elements step by step and always add the lower one to the result
-            if (lo[i] <= hi[j]) {
-                result[k] = lo[i];
+            // if upper subarray is done, fill result with lower subarray
+            else if(hiIndex >= hiLength) {
+                while(loIndex < loLength) {
+                    data[i] = lo[loIndex];
+                    loIndex++;
+                    i++;
+                }
+            }
+            else {
+                // compare elements of lower and upper subarray - add the lower elements to result
+                if(lo[loIndex] <= hi[hiIndex]) {
+                    data[i] = lo[loIndex];
+                    loIndex++;
+                }
+                else {
+                    data[i] = hi[hiIndex];
+                    hiIndex++;
+                }
                 i++;
-                k++;
-            } else {
-                result[k] = hi[j];
-                j++;
-                k++;
             }
         }
+    }
 
-        return result;
+    /**
+     * Helper method to extract an array that represents a section of another array. The section is defined
+     * by indices.
+     *
+     * @param data source array
+     * @param start start index of section
+     * @param end end index of section
+     * @return an array that represents a section of the given array
+     */
+    private int[] extractArray(int[] data, int start, int end) {
+        int length = (end - start) + 1;
+        int[] array = new int[length];
+
+        for(int i = 0; i < length; i++) {
+            array[i] = data[start + i];
+        }
+
+        return array;
     }
 }
