@@ -279,6 +279,25 @@ public class Ab1Test {
 		assertEquals(4, ar[0]);
 	}
 
+	/**
+	 * added by SimSöl
+	 */
+	@Test
+	public void testHeapSortEmpty() {
+		int[] ar = {};
+		assertDoesNotThrow(() -> ab1Impl.heapsort(ar));
+	}
+
+	/**
+	 * added by SimSöl
+	 */
+	@Test
+	public void testHeapSortOneElement() {
+		int[] ar = {4};
+		ab1Impl.heapsort(ar);
+		assertEquals(4, ar[0]);
+	}
+
 	private int[] getRandomArray(int size) {
 		int[] arr = new int[size];
 		for (int i = 0; i < size; ++i)
