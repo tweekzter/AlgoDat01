@@ -1,27 +1,6 @@
 package ab1;
 
-/**
- * Algorithmen & Datenstrukturen
- * ABGABE 1
- *
- * Peter Söllnbauer - #11904589
- * Manuel Simon - #00326348
- */
 public interface Ab1 {
-	/**
-	 * Eine Klasse um eine einfach-verkettete Liste zu repräsentieren.
-	 * A class to represent a singly-linked list.
-	 */
-	public class ListNode {
-		public ListNode next; /** Pointer to next element */
-		public int value; /** The value of the current element */
-
-		public ListNode() {}
-		public ListNode(int value) {
-			this.value = value;
-		}
-	}
-
 	/**
 	 * Überprüft im übergebenen Array die Heap-Bedingung H(i, j).
 	 * Checks the heap condition H(i, j) for the given array.
@@ -60,6 +39,15 @@ public interface Ab1 {
 	 *             the array to be sorted
 	 */
 	public void heapsort(int[] data);
+
+	/**
+	 * Eine Klasse um eine einfach-verkettete Liste zu repräsentieren.
+	 * A class to represent a singly-linked list.
+	 */
+	public class ListNode {
+		public ListNode next; /** Pointer to next element */
+		public int value; /** The value of the current element */
+	}
 
 	/**
 	 * Fügt ein neues Element in die übergebene Liste ein und erhält die

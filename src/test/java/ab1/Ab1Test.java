@@ -162,7 +162,8 @@ public class Ab1Test {
 	 */
 	@Test
 	public void testListInsertOnFirstPosition() {
-		ListNode head = new ListNode(2);
+		ListNode head = new ListNode();
+		head.value = 2;
 		head = ab1Impl.insert(head, 3);
 		head = ab1Impl.insert(head, 4);
 		head = ab1Impl.insert(head, 1);
@@ -175,7 +176,8 @@ public class Ab1Test {
 	 */
 	@Test
 	public void testListInsertOnLastPosition() {
-		ListNode head = new ListNode(2);
+		ListNode head = new ListNode();
+		head.value = 2;
 		head = ab1Impl.insert(head, 3);
 		head = ab1Impl.insert(head, 4);
 

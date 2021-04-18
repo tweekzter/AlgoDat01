@@ -113,7 +113,8 @@ public class Ab1Impl implements Ab1 {
 
     @Override
     public ListNode insert(ListNode head, int value) {
-        ListNode newNode = new ListNode(value);
+        ListNode newNode = new ListNode();
+        newNode.value = value;
         ListNode actual = head;
         ListNode prev = null;
 
@@ -185,7 +186,7 @@ public class Ab1Impl implements Ab1 {
         if(start >= end)
             return;
 
-        // split into lower and upper subarrays
+        // split into lower and upper subarrays (using indices)
         int length = (end - start) + 1;
         int hiStart = start + length / 2;
         int loEnd = hiStart - 1;
